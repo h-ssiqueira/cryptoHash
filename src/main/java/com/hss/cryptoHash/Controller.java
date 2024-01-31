@@ -6,89 +6,115 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 
 import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
+import static org.springframework.security.crypto.password.Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256;
 
 @Path("/hash")
 public class Controller {
 
+    private final Argon2PasswordEncoder argon2PasswordEncoder = new Argon2PasswordEncoder(128/8, 256/8, 1, 10*1024, 10);
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    private final SCryptPasswordEncoder sCryptPasswordEncoder = new SCryptPasswordEncoder(65536, 8, 1, 32, 16);
+    private final Pbkdf2PasswordEncoder pbkdf2PasswordEncoder = new Pbkdf2PasswordEncoder("", 16, 310000, PBKDF2WithHmacSHA256);
+
+    // ./mvnw compile quarkus:dev:
+    // curl -X POST -H "Content-Type: text/plain" -d 'admin' http://localhost:8080/hash
     @POST
     @Produces(TEXT_PLAIN)
     @Consumes(TEXT_PLAIN)
-    public String hello(String password) {
-        int saltLength = 128 / 8; // 128 bits
-        int hashLength = 256 / 8; // 256 bits
-        int parallelism = 1;
-        int memoryInKb = 10 * 1024; // 10 MB
-        int iterations = 10;
-        Argon2PasswordEncoder passwordEncoder = new Argon2PasswordEncoder(saltLength, hashLength, parallelism, memoryInKb, iterations);
-        StringBuilder response = new StringBuilder();
-        long start,end;
+    public String showHashes(String password) {
+        var response = new StringBuilder();
+        var start = 0L;
+        var end = 0L;
 
+        response.append("Broken Hashes:\n\n");
         start = System.nanoTime();
         response.append("MD2: ").append(DigestUtils.md2Hex(password));
         end = System.nanoTime();
-        response.append("\nTime spent: ").append(calculateTime(start,end)).append("μs");
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
 
         start = System.nanoTime();
         response.append("\n\nMD5: ").append(DigestUtils.md5Hex(password));
         end = System.nanoTime();
-        response.append("\nTime spent: ").append(calculateTime(start,end)).append("μs");
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
 
         start = System.nanoTime();
         response.append("\n\nSHA1: ").append(DigestUtils.sha1Hex(password));
         end = System.nanoTime();
-        response.append("\nTime spent: ").append(calculateTime(start,end)).append("μs");
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
+
+        response.append("\n\n****************************\nCandidates:");
 
         start = System.nanoTime();
         response.append("\n\nSHA256: ").append(DigestUtils.sha256Hex(password));
         end = System.nanoTime();
-        response.append("\nTime spent: ").append(calculateTime(start,end)).append("μs");
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
 
         start = System.nanoTime();
         response.append("\n\nSHA384: ").append(DigestUtils.sha384Hex(password));
         end = System.nanoTime();
-        response.append("\nTime spent: ").append(calculateTime(start,end)).append("μs");
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
 
         start = System.nanoTime();
         response.append("\n\nSHA512 224: ").append(DigestUtils.sha512_224Hex(password));
         end = System.nanoTime();
-        response.append("\nTime spent: ").append(calculateTime(start,end)).append("μs");
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
 
         start = System.nanoTime();
         response.append("\n\nSHA512 256: ").append(DigestUtils.sha512_256Hex(password));
         end = System.nanoTime();
-        response.append("\nTime spent: ").append(calculateTime(start,end)).append("μs");
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
 
         start = System.nanoTime();
         response.append("\n\nSHA512: ").append(DigestUtils.sha512Hex(password));
         end = System.nanoTime();
-        response.append("\nTime spent: ").append(calculateTime(start,end)).append("μs");
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
 
         start = System.nanoTime();
         response.append("\n\nSHA3 224: ").append(DigestUtils.sha3_224Hex(password));
         end = System.nanoTime();
-        response.append("\nTime spent: ").append(calculateTime(start,end)).append("μs");
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
 
         start = System.nanoTime();
         response.append("\n\nSHA3 256: ").append(DigestUtils.sha3_256Hex(password));
         end = System.nanoTime();
-        response.append("\nTime spent: ").append(calculateTime(start,end)).append("μs");
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
 
         start = System.nanoTime();
         response.append("\n\nSHA3 384: ").append(DigestUtils.sha3_384Hex(password));
         end = System.nanoTime();
-        response.append("\nTime spent: ").append(calculateTime(start,end)).append("μs");
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
 
         start = System.nanoTime();
         response.append("\n\nSHA3 512: ").append(DigestUtils.sha3_512Hex(password));
         end = System.nanoTime();
-        response.append("\nTime spent: ").append(calculateTime(start,end)).append("μs");
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
+
+        response.append("\n\n****************************\nRecommended with passwords:");
 
         start = System.nanoTime();
-        response.append("\n\nArgon2: ").append(passwordEncoder.encode(password));
+        response.append("\n\nArgon2: ").append(argon2PasswordEncoder.encode(password));
         end = System.nanoTime();
-        response.append("\nTime spent: ").append(calculateTime(start,end)).append("μs");
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
+
+        start = System.nanoTime();
+        response.append("\n\nSCrypt: ").append(sCryptPasswordEncoder.encode(password));
+        end = System.nanoTime();
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
+
+        start = System.nanoTime();
+        response.append("\n\nBCrypt: ").append(bCryptPasswordEncoder.encode(password));
+        end = System.nanoTime();
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
+
+        start = System.nanoTime();
+        response.append("\n\nPBKDF2: ").append(pbkdf2PasswordEncoder.encode(password));
+        end = System.nanoTime();
+        response.append("\nTime spent: ").append(calculateTime(start,end)).append(" μs");
 
         return response.append('\n').toString();
     }
