@@ -1,4 +1,4 @@
-package com.hss.cryptohash.commons;
+package com.hss.cryptohash.commons.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

@@ -1,10 +1,10 @@
 package com.hss.cryptohash.controller;
 
 import com.hss.cryptohash.commons.Algorithm;
-import com.hss.cryptohash.commons.EncryptionRequestDTO;
-import com.hss.cryptohash.commons.EncryptionResponseDTO;
-import com.hss.cryptohash.commons.MatchedResponseDTO;
-import com.hss.cryptohash.commons.PasswordMatchingDTO;
+import com.hss.cryptohash.commons.dto.EncryptionRequestDTO;
+import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
+import com.hss.cryptohash.commons.dto.MatchedResponseDTO;
+import com.hss.cryptohash.commons.dto.PasswordMatchingDTO;
 import jakarta.inject.Singleton;
 
 @Singleton

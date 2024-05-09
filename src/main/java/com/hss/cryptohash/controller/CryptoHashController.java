@@ -1,7 +1,7 @@
 package com.hss.cryptohash.controller;
 
-import com.hss.cryptohash.commons.EncryptionRequestDTO;
-import com.hss.cryptohash.commons.PasswordMatchingDTO;
+import com.hss.cryptohash.commons.dto.EncryptionRequestDTO;
+import com.hss.cryptohash.commons.dto.PasswordMatchingDTO;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.validation.Valid;

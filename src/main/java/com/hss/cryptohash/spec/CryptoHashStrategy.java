@@ -1,9 +1,9 @@
 package com.hss.cryptohash.spec;
 
 
-import com.hss.cryptohash.commons.EncryptionResponseDTO;
-import com.hss.cryptohash.commons.MatchedResponseDTO;
-import com.hss.cryptohash.commons.PasswordMatchingDTO;
+import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
+import com.hss.cryptohash.commons.dto.MatchedResponseDTO;
+import com.hss.cryptohash.commons.dto.PasswordMatchingDTO;
 
 public interface CryptoHashStrategy {
 
