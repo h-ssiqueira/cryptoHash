@@ -4,6 +4,9 @@ import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.MatchedResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingDTO;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
@@ -15,10 +18,11 @@ import java.time.Instant;
 import static com.hss.cryptohash.commons.logging.LoggingConstants.LOG001;
 
 @Slf4j
+@ApplicationScoped
 public class PBKDF2StrategyImpl implements CryptoHashStrategy {
 
     @ConfigProperty(name = "hash.pbkd2.secret")
-    private CharSequence secret;
+    private String secret;
     @ConfigProperty(name = "hash.pbkd2.saltLength")
     private int saltLength;
     @ConfigProperty(name = "hash.pbkd2.iterations")
@@ -26,7 +30,13 @@ public class PBKDF2StrategyImpl implements CryptoHashStrategy {
     @ConfigProperty(name = "hash.pbkd2.secretKeyFactoryAlgorithm")
     private SecretKeyFactoryAlgorithm secretKeyFactoryAlgorithm;
 
-    private final Pbkdf2PasswordEncoder pbkd2 = new Pbkdf2PasswordEncoder(secret, saltLength, iterations, secretKeyFactoryAlgorithm);
+    private Pbkdf2PasswordEncoder pbkd2;
+
+    @Inject
+    @PostConstruct
+    public void init() {
+        pbkd2 = new Pbkdf2PasswordEncoder(secret, saltLength, iterations, secretKeyFactoryAlgorithm);
+    }
 
     @Override
     public EncryptionResponseDTO encrypt(String password) {

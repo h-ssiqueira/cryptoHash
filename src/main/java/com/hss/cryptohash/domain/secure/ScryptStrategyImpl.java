@@ -4,6 +4,9 @@ import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.MatchedResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingDTO;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
@@ -14,6 +17,7 @@ import java.time.Instant;
 import static com.hss.cryptohash.commons.logging.LoggingConstants.LOG001;
 
 @Slf4j
+@ApplicationScoped
 public class ScryptStrategyImpl implements CryptoHashStrategy {
 
     @ConfigProperty(name = "hash.scrypt.cpuCost")
@@ -27,7 +31,13 @@ public class ScryptStrategyImpl implements CryptoHashStrategy {
     @ConfigProperty(name = "hash.scrypt.saltLength")
     private int saltLength;
 
-    private final SCryptPasswordEncoder scrypt = new SCryptPasswordEncoder(cpuCost, memoryCost, parallelization, keyLength, saltLength);
+    private SCryptPasswordEncoder scrypt;
+
+    @Inject
+    @PostConstruct
+    public void init() {
+        scrypt = new SCryptPasswordEncoder(cpuCost, memoryCost, parallelization, keyLength, saltLength);
+    }
 
     @Override
     public EncryptionResponseDTO encrypt(String password) {

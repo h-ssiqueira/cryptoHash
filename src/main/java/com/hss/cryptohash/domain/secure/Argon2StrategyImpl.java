@@ -4,6 +4,9 @@ import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.MatchedResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingDTO;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
@@ -14,6 +17,7 @@ import java.time.Instant;
 import static com.hss.cryptohash.commons.logging.LoggingConstants.LOG001;
 
 @Slf4j
+@ApplicationScoped
 public class Argon2StrategyImpl implements CryptoHashStrategy {
 
     @ConfigProperty(name = "hash.argon2.saltLength")
@@ -27,7 +31,13 @@ public class Argon2StrategyImpl implements CryptoHashStrategy {
     @ConfigProperty(name = "hash.argon2.iterations")
     private int iterations;
 
-    private final Argon2PasswordEncoder argon2 = new Argon2PasswordEncoder(saltLength, hashLength, parallelism, memory, iterations);
+    private Argon2PasswordEncoder argon2;
+
+    @Inject
+    @PostConstruct
+    public void init() {
+         argon2 = new Argon2PasswordEncoder(saltLength, hashLength, parallelism, memory, iterations);
+    }
 
     @Override
     public EncryptionResponseDTO encrypt(String password) {

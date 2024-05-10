@@ -5,32 +5,33 @@ import com.hss.cryptohash.commons.dto.MatchedResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingDTO;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
 import com.hss.cryptohash.util.ByteComparator;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Arrays;
 
 import static com.hss.cryptohash.commons.logging.LoggingConstants.LOG001;
-import static org.apache.commons.codec.digest.DigestUtils.sha1;
+import static org.apache.commons.codec.digest.DigestUtils.sha1Hex;
 
 @Slf4j
+@ApplicationScoped
 public class SHA1StrategyImpl implements CryptoHashStrategy {
 
     @Override
     public EncryptionResponseDTO encrypt(String password) {
         var start = Instant.now();
-        var encrypted = sha1(password);
+        var encrypted = sha1Hex(password);
         var end = Instant.now();
         log.info(LOG001, "encrypt", "SHA1", Duration.between(start, end).toMillis());
-        return new EncryptionResponseDTO(Arrays.toString(encrypted));
+        return new EncryptionResponseDTO(encrypted);
     }
 
     @Override
     public MatchedResponseDTO matches(PasswordMatchingDTO passwordMatchingDTO) {
         var start = Instant.now();
-        var password = sha1(passwordMatchingDTO.rawPassword());
-        var match = new ByteComparator().compare(password, passwordMatchingDTO.encryptedPassword().getBytes());
+        var password = sha1Hex(passwordMatchingDTO.rawPassword());
+        var match = new ByteComparator().compare(password.getBytes(), passwordMatchingDTO.encryptedPassword().getBytes());
         var end = Instant.now();
         log.info(LOG001, "match", "SHA1", Duration.between(start, end).toMillis());
         return new MatchedResponseDTO(match == 0);

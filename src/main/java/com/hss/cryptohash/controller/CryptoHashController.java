@@ -1,18 +1,23 @@
 package com.hss.cryptohash.controller;
 
+import com.hss.cryptohash.commons.Algorithm;
+import com.hss.cryptohash.commons.CryptoHashException;
+import com.hss.cryptohash.commons.dto.AlgorithmListResponseDTO;
 import com.hss.cryptohash.commons.dto.EncryptionRequestDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingDTO;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Arrays;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -32,25 +37,38 @@ public class CryptoHashController {
     @Path("/encrypt")
     @Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-    public Response encrypt(@Valid EncryptionRequestDTO encryptionRequestDTO, @Context HttpHeaders headers) {
-        var header = extractStrategy(headers);
-        log.debug("{} encryption", header);
-        cryptoHashDelegate.setStrategy(header);
-        return Response.ok().entity(cryptoHashDelegate.encrypt(encryptionRequestDTO)).build();
+    public Response encrypt(@Valid EncryptionRequestDTO encryptionRequestDTO, @QueryParam(value = "algorithm") String algorithm) throws CryptoHashException {
+        try{
+            log.debug("{} encryption", algorithm);
+            cryptoHashDelegate.setStrategy(algorithm);
+            return Response.ok().entity(cryptoHashDelegate.encrypt(encryptionRequestDTO)).build();
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            throw new CryptoHashException(ex);
+        }
     }
 
     @POST
     @Path("/match")
     @Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-    public Response match(@Valid PasswordMatchingDTO passwordMatchingDTO, @Context HttpHeaders headers) {
-        var header = extractStrategy(headers);
-        log.debug("{} match", header);
-        cryptoHashDelegate.setStrategy(header);
-        return Response.ok().entity(cryptoHashDelegate.match(passwordMatchingDTO)).build();
+    public Response match(@Valid PasswordMatchingDTO passwordMatchingDTO, @QueryParam(value = "algorithm") String algorithm) throws CryptoHashException {
+        try {
+            log.debug("{} match", algorithm);
+            cryptoHashDelegate.setStrategy(algorithm);
+            return Response.ok().entity(cryptoHashDelegate.match(passwordMatchingDTO)).build();
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            throw new CryptoHashException(ex);
+        }
     }
 
-    private String extractStrategy(HttpHeaders headers) {
-        return headers.getRequestHeaders().get("cryptoHashStrategy").get(0);
+    @GET
+    @Path("/algorithms")
+    @Produces(APPLICATION_JSON)
+    public Response getAlgorithms() {
+        var list = Arrays.stream(Algorithm.values()).map(Algorithm::getValue).toList();
+        return Response.ok().entity(new AlgorithmListResponseDTO(list, list.size())).build();
     }
+
 }

@@ -2,5 +2,7 @@ package com.hss.cryptohash.commons.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record EncryptionRequestDTO(@NotBlank String password) {
+import java.io.Serializable;
+
+public record EncryptionRequestDTO(@NotBlank String password) implements Serializable {
 }
