@@ -1,9 +1,9 @@
-package com.hss.cryptohash.commons;
+package com.hss.cryptohash.commons.exception;
 
 import lombok.Getter;
 
 @Getter
-public class CryptoHashException extends Exception {
+public class CryptoHashException extends RuntimeException {
 
     private final String clazz;
 

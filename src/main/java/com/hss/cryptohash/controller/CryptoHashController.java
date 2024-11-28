@@ -1,10 +1,11 @@
 package com.hss.cryptohash.controller;
 
 import com.hss.cryptohash.commons.Algorithm;
-import com.hss.cryptohash.commons.CryptoHashException;
+import com.hss.cryptohash.commons.dto.GeneralResponseDTO;
+import com.hss.cryptohash.commons.exception.CryptoHashException;
 import com.hss.cryptohash.commons.dto.AlgorithmListResponseDTO;
 import com.hss.cryptohash.commons.dto.EncryptionRequestDTO;
-import com.hss.cryptohash.commons.dto.PasswordMatchingDTO;
+import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.validation.Valid;
@@ -41,7 +42,7 @@ public class CryptoHashController {
         try{
             log.debug("{} encryption", algorithm);
             cryptoHashDelegate.setStrategy(algorithm);
-            return Response.ok().entity(cryptoHashDelegate.encrypt(encryptionRequestDTO)).build();
+            return Response.ok().entity(new GeneralResponseDTO<>(cryptoHashDelegate.encrypt(encryptionRequestDTO))).build();
         } catch (Exception ex) {
             log.error(ex.getMessage());
             throw new CryptoHashException(ex);
@@ -52,11 +53,11 @@ public class CryptoHashController {
     @Path("/match")
     @Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-    public Response match(@Valid PasswordMatchingDTO passwordMatchingDTO, @QueryParam(value = "algorithm") String algorithm) throws CryptoHashException {
+    public Response match(@Valid PasswordMatchingRequestDTO passwordMatchingRequestDTO, @QueryParam(value = "algorithm") String algorithm) throws CryptoHashException {
         try {
             log.debug("{} match", algorithm);
             cryptoHashDelegate.setStrategy(algorithm);
-            return Response.ok().entity(cryptoHashDelegate.match(passwordMatchingDTO)).build();
+            return Response.ok().entity(new GeneralResponseDTO<>(cryptoHashDelegate.match(passwordMatchingRequestDTO))).build();
         } catch (Exception ex) {
             log.error(ex.getMessage());
             throw new CryptoHashException(ex);
@@ -68,7 +69,7 @@ public class CryptoHashController {
     @Produces(APPLICATION_JSON)
     public Response getAlgorithms() {
         var list = Arrays.stream(Algorithm.values()).map(Algorithm::getValue).toList();
-        return Response.ok().entity(new AlgorithmListResponseDTO(list, list.size())).build();
+        return Response.ok().entity(new GeneralResponseDTO<>(new AlgorithmListResponseDTO(list))).build();
     }
 
 }

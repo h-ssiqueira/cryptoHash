@@ -2,7 +2,7 @@ package com.hss.cryptohash.domain.secure;
 
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.MatchedResponseDTO;
-import com.hss.cryptohash.commons.dto.PasswordMatchingDTO;
+import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,11 +31,10 @@ public class Argon2StrategyImpl implements CryptoHashStrategy {
     @ConfigProperty(name = "hash.argon2.iterations")
     private int iterations;
 
-    private Argon2PasswordEncoder argon2;
+    private final Argon2PasswordEncoder argon2;
 
     @Inject
-    @PostConstruct
-    public void init() {
+    public Argon2StrategyImpl() {
          argon2 = new Argon2PasswordEncoder(saltLength, hashLength, parallelism, memory, iterations);
     }
 
@@ -49,9 +48,9 @@ public class Argon2StrategyImpl implements CryptoHashStrategy {
     }
 
     @Override
-    public MatchedResponseDTO matches(PasswordMatchingDTO passwordMatchingDTO) {
+    public MatchedResponseDTO matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
         var start = Instant.now();
-        var match = argon2.matches(passwordMatchingDTO.rawPassword(), passwordMatchingDTO.encryptedPassword());
+        var match = argon2.matches(passwordMatchingRequestDTO.rawPassword(), passwordMatchingRequestDTO.encryptedPassword());
         var end = Instant.now();
         log.info(LOG001, "match", "BCrypt", Duration.between(start, end).toMillis());
         return new MatchedResponseDTO(match);

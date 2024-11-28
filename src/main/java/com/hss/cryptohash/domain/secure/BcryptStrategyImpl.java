@@ -2,11 +2,12 @@ package com.hss.cryptohash.domain.secure;
 
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.MatchedResponseDTO;
-import com.hss.cryptohash.commons.dto.PasswordMatchingDTO;
+import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +18,7 @@ import java.time.Instant;
 import static com.hss.cryptohash.commons.logging.LoggingConstants.LOG001;
 
 @Slf4j
+@NoArgsConstructor
 @ApplicationScoped
 public class BcryptStrategyImpl implements CryptoHashStrategy {
 
@@ -38,9 +40,9 @@ public class BcryptStrategyImpl implements CryptoHashStrategy {
     }
 
     @Override
-    public MatchedResponseDTO matches(PasswordMatchingDTO passwordMatchingDTO) {
+    public MatchedResponseDTO matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
         var start = Instant.now();
-        var match = bcrypt.matches(passwordMatchingDTO.rawPassword(), passwordMatchingDTO.encryptedPassword());
+        var match = bcrypt.matches(passwordMatchingRequestDTO.rawPassword(), passwordMatchingRequestDTO.encryptedPassword());
         var end = Instant.now();
         log.info(LOG001, "match", "BCrypt", Duration.between(start, end).toMillis());
         return new MatchedResponseDTO(match);

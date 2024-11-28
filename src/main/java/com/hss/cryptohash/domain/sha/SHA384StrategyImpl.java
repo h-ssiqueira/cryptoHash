@@ -2,10 +2,11 @@ package com.hss.cryptohash.domain.sha;
 
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.MatchedResponseDTO;
-import com.hss.cryptohash.commons.dto.PasswordMatchingDTO;
+import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
 import com.hss.cryptohash.util.ByteComparator;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
@@ -15,6 +16,7 @@ import static com.hss.cryptohash.commons.logging.LoggingConstants.LOG001;
 import static org.apache.commons.codec.digest.DigestUtils.sha384Hex;
 
 @Slf4j
+@NoArgsConstructor
 @ApplicationScoped
 public class SHA384StrategyImpl implements CryptoHashStrategy {
 
@@ -28,10 +30,10 @@ public class SHA384StrategyImpl implements CryptoHashStrategy {
     }
 
     @Override
-    public MatchedResponseDTO matches(PasswordMatchingDTO passwordMatchingDTO) {
+    public MatchedResponseDTO matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
         var start = Instant.now();
-        var password = sha384Hex(passwordMatchingDTO.rawPassword());
-        var match = new ByteComparator().compare(password.getBytes(), passwordMatchingDTO.encryptedPassword().getBytes());
+        var password = sha384Hex(passwordMatchingRequestDTO.rawPassword());
+        var match = new ByteComparator().compare(password.getBytes(), passwordMatchingRequestDTO.encryptedPassword().getBytes());
         var end = Instant.now();
         log.info(LOG001, "match", "SHA384", Duration.between(start, end).toMillis());
         return new MatchedResponseDTO(match == 0);
