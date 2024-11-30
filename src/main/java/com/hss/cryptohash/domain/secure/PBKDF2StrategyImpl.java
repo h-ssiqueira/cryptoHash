@@ -1,15 +1,11 @@
 package com.hss.cryptohash.domain.secure;
 
+import com.hss.cryptohash.commons.config.ConfigApplicationProperties;
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
-import com.hss.cryptohash.commons.dto.MatchedResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
+import com.hss.cryptohash.commons.exception.CryptoHashException;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
-import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm;
 
@@ -19,42 +15,31 @@ import java.time.Instant;
 import static com.hss.cryptohash.commons.logging.LoggingConstants.LOG001;
 
 @Slf4j
-@NoArgsConstructor
-@ApplicationScoped
 public class PBKDF2StrategyImpl implements CryptoHashStrategy {
 
-    @ConfigProperty(name = "hash.pbkd2.secret")
-    private String secret;
-    @ConfigProperty(name = "hash.pbkd2.saltLength")
-    private int saltLength;
-    @ConfigProperty(name = "hash.pbkd2.iterations")
-    private int iterations;
-    @ConfigProperty(name = "hash.pbkd2.secretKeyFactoryAlgorithm")
-    private SecretKeyFactoryAlgorithm secretKeyFactoryAlgorithm;
+    private final Pbkdf2PasswordEncoder pbkdf2;
 
-    private Pbkdf2PasswordEncoder pbkd2;
-
-    @Inject
-    @PostConstruct
-    public void init() {
-        pbkd2 = new Pbkdf2PasswordEncoder(secret, saltLength, iterations, secretKeyFactoryAlgorithm);
+    public PBKDF2StrategyImpl(ConfigApplicationProperties.PBKDF2Properties properties) {
+        pbkdf2 = new Pbkdf2PasswordEncoder(properties.secret(), properties.saltLength(), properties.iterations(), SecretKeyFactoryAlgorithm.valueOf(properties.secretKeyFactoryAlgorithm()));
     }
 
     @Override
     public EncryptionResponseDTO encrypt(String password) {
         var start = Instant.now();
-        var encrypted = pbkd2.encode(password);
+        var encrypted = pbkdf2.encode(password);
         var end = Instant.now();
         log.info(LOG001, "encrypt", "PBKDF2", Duration.between(start, end).toMillis());
         return new EncryptionResponseDTO(encrypted);
     }
 
     @Override
-    public MatchedResponseDTO matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
+    public void matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
         var start = Instant.now();
-        var match = pbkd2.matches(passwordMatchingRequestDTO.rawPassword(), passwordMatchingRequestDTO.encryptedPassword());
+        var match = pbkdf2.matches(passwordMatchingRequestDTO.rawPassword(), passwordMatchingRequestDTO.encryptedPassword());
         var end = Instant.now();
         log.info(LOG001, "match", "PBKDF2", Duration.between(start, end).toMillis());
-        return new MatchedResponseDTO(match);
+        if (!match) {
+            throw new CryptoHashException("Invalid password!");
+        }
     }
 }

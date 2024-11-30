@@ -1,14 +1,11 @@
 package com.hss.cryptohash.domain.secure;
 
+import com.hss.cryptohash.commons.config.ConfigApplicationProperties;
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
-import com.hss.cryptohash.commons.dto.MatchedResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
+import com.hss.cryptohash.commons.exception.CryptoHashException;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
-import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 
 import java.time.Duration;
@@ -17,25 +14,12 @@ import java.time.Instant;
 import static com.hss.cryptohash.commons.logging.LoggingConstants.LOG001;
 
 @Slf4j
-@ApplicationScoped
 public class Argon2StrategyImpl implements CryptoHashStrategy {
-
-    @ConfigProperty(name = "hash.argon2.saltLength")
-    private int saltLength;
-    @ConfigProperty(name = "hash.argon2.hashLength")
-    private int hashLength;
-    @ConfigProperty(name = "hash.argon2.parallelism")
-    private int parallelism;
-    @ConfigProperty(name = "hash.argon2.memory")
-    private int memory;
-    @ConfigProperty(name = "hash.argon2.iterations")
-    private int iterations;
 
     private final Argon2PasswordEncoder argon2;
 
-    @Inject
-    public Argon2StrategyImpl() {
-         argon2 = new Argon2PasswordEncoder(saltLength, hashLength, parallelism, memory, iterations);
+    public Argon2StrategyImpl(ConfigApplicationProperties.Argon2Properties properties) {
+        argon2 = new Argon2PasswordEncoder(properties.saltLength(), properties.hashLength(), properties.parallelism(), properties.memory(), properties.iterations());
     }
 
     @Override
@@ -48,11 +32,13 @@ public class Argon2StrategyImpl implements CryptoHashStrategy {
     }
 
     @Override
-    public MatchedResponseDTO matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
+    public void matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
         var start = Instant.now();
         var match = argon2.matches(passwordMatchingRequestDTO.rawPassword(), passwordMatchingRequestDTO.encryptedPassword());
         var end = Instant.now();
         log.info(LOG001, "match", "BCrypt", Duration.between(start, end).toMillis());
-        return new MatchedResponseDTO(match);
+        if (!match) {
+            throw new CryptoHashException("Invalid password!");
+        }
     }
 }

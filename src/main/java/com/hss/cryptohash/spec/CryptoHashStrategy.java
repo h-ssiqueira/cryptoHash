@@ -2,12 +2,11 @@ package com.hss.cryptohash.spec;
 
 
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
-import com.hss.cryptohash.commons.dto.MatchedResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
 
 public interface CryptoHashStrategy {
 
     EncryptionResponseDTO encrypt(String password);
 
-    MatchedResponseDTO matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO);
+    void matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO);
 }

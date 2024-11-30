@@ -1,15 +1,11 @@
 package com.hss.cryptohash.domain.secure;
 
+import com.hss.cryptohash.commons.config.ConfigApplicationProperties;
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
-import com.hss.cryptohash.commons.dto.MatchedResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
+import com.hss.cryptohash.commons.exception.CryptoHashException;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
-import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.Duration;
@@ -18,16 +14,12 @@ import java.time.Instant;
 import static com.hss.cryptohash.commons.logging.LoggingConstants.LOG001;
 
 @Slf4j
-@NoArgsConstructor
-@ApplicationScoped
 public class BcryptStrategyImpl implements CryptoHashStrategy {
 
-    private BCryptPasswordEncoder bcrypt;
+    private final BCryptPasswordEncoder bcrypt;
 
-    @Inject
-    @PostConstruct
-    public void init(@ConfigProperty(name = "hash.bcrypt.strength") String strength) {
-        bcrypt = new BCryptPasswordEncoder(Integer.parseInt(strength));
+    public BcryptStrategyImpl(ConfigApplicationProperties.BCryptProperties properties) {
+        bcrypt = new BCryptPasswordEncoder(properties.strength());
     }
 
     @Override
@@ -40,11 +32,13 @@ public class BcryptStrategyImpl implements CryptoHashStrategy {
     }
 
     @Override
-    public MatchedResponseDTO matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
+    public void matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
         var start = Instant.now();
         var match = bcrypt.matches(passwordMatchingRequestDTO.rawPassword(), passwordMatchingRequestDTO.encryptedPassword());
         var end = Instant.now();
         log.info(LOG001, "match", "BCrypt", Duration.between(start, end).toMillis());
-        return new MatchedResponseDTO(match);
+        if (!match) {
+            throw new CryptoHashException("Invalid password!");
+        }
     }
 }

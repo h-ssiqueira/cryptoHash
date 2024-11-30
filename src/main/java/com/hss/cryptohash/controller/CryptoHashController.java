@@ -1,11 +1,11 @@
 package com.hss.cryptohash.controller;
 
-import com.hss.cryptohash.commons.Algorithm;
-import com.hss.cryptohash.commons.dto.GeneralResponseDTO;
-import com.hss.cryptohash.commons.exception.CryptoHashException;
 import com.hss.cryptohash.commons.dto.AlgorithmListResponseDTO;
 import com.hss.cryptohash.commons.dto.EncryptionRequestDTO;
+import com.hss.cryptohash.commons.dto.GeneralResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
+import com.hss.cryptohash.commons.exception.CryptoHashException;
+import com.hss.cryptohash.commons.strategy.AlgorithmStrategyEnum;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.validation.Valid;
@@ -57,7 +57,8 @@ public class CryptoHashController {
         try {
             log.debug("{} match", algorithm);
             cryptoHashDelegate.setStrategy(algorithm);
-            return Response.ok().entity(new GeneralResponseDTO<>(cryptoHashDelegate.match(passwordMatchingRequestDTO))).build();
+            cryptoHashDelegate.match(passwordMatchingRequestDTO);
+            return Response.ok().build();
         } catch (Exception ex) {
             log.error(ex.getMessage());
             throw new CryptoHashException(ex);
@@ -68,7 +69,7 @@ public class CryptoHashController {
     @Path("/algorithms")
     @Produces(APPLICATION_JSON)
     public Response getAlgorithms() {
-        var list = Arrays.stream(Algorithm.values()).map(Algorithm::getValue).toList();
+        var list = Arrays.stream(AlgorithmStrategyEnum.values()).map(AlgorithmStrategyEnum::toString).toList();
         return Response.ok().entity(new GeneralResponseDTO<>(new AlgorithmListResponseDTO(list))).build();
     }
 
