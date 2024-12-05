@@ -2,40 +2,27 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Crypto Hash</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Crypto hashing algorithms, hash, match and test possible passwords">
         <link rel="apple-touch-icon" sizes="180x180" href="imgs/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="imgs/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="imgs/favicon-16x16.png">
         <link rel="shortcut icon" href="imgs/favicon.ico" type="image/x-icon">
         <link rel="manifest" href="imgs/site.webmanifest">
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="style.css" defer>
+        <script src="js/loadComponents.js" defer></script>
+        <script src="js/hash.js" async></script>
+        <title>Crypto Hash</title>
     </head>
     <body>
-        <nav>
-            <div class="content-wrapper">
-                <div class="grid">
-                    <div class="left-column">
-                        <a href="/q/dev-ui/" class="cta-button">Dev UI</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        <hr>
-        <textarea autofocus id="textAreaInput"></textarea>
-        <br>
+        <div id="nav"></div>
+        <textarea autofocus aria-label="inputPassword" id="textAreaInput"></textarea>
         <div id="inputs">
-            <select id="dropdown" name="dropdown"></select>
+            <select aria-label="Algorithm" id="dropdown" name="dropdown"></select>
             <input type="submit" value="Hash" id="hash">
         </div>
-        <br>
-        <textarea readonly id="textAreaOutput"></textarea>
-        <hr>
-        <footer>
-            <p>hss &#169;<span id="currYear"></span> All Rights Reserved.</p>
-            <script>
-                document.getElementById('currYear').textContent = new Date().getFullYear();
-            </script>
-        </footer>
-        <script src="script.js"></script>
+        <textarea readonly aria-label="outputPassword" id="textAreaOutput" onclick="copyToClipboard()"></textarea>
+        <div id="footer"></div>
+        <script src="js/algorithms.js" defer></script>
     </body>
 </html>
