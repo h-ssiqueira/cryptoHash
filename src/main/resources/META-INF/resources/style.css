@@ -1,9 +1,23 @@
 @charset "UTF-8";
 
-body {
+:root {
+    --backgroundColor: #20b2aa;
+    --inOutColor: #f5f5dc;
+    --borderColor: #000000;
+    --separatorColor: #BBBBBB;
+    --gradientColor: #243b35;
+    --hoverColor: #FFD700;
+    --navItemColor: #FAFAD2;
+}
+
+* {
     margin: 0;
+    padding: 0;
+}
+
+body {
     font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: lightseagreen;
+    background-color: var(--backgroundColor);
 }
 
 ::-moz-selection {
@@ -16,42 +30,27 @@ body {
     background-color: white;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    margin-bottom: 0.5rem;
-    font-weight: 400;
-    line-height: 1.5;
-}
-
-h1 { font-size: 2.25rem; }
-
-h2 { font-size: 1.6rem }
-
-h3 { font-size: 1.5rem }
-
-h4 { font-size: 1.4rem }
-
-h5 { font-size: 1.25rem }
-
-h6 { font-size: 1rem }
-
 p {
     padding: .15rem 0;
-    margin: 0;
     line-height: 1.3rem;
+}
+
+nav {
+    background-image: linear-gradient(to bottom, var(--gradientColor), var(--backgroundColor));
+
 }
 
 ul {
     list-style-type: none;
     overflow: hidden;
-    margin: 0;
-    padding: 0;
-    background-color: yellowgreen;
+    display: flex;
+    justify-content: center;
 }
 
 li {
     float: left;
     text-align: center;
-    border-right: 1px solid #BBBBBB;
+    border-right: 1px solid var(--separatorColor);
 }
 
 li:last-child {
@@ -62,12 +61,12 @@ a {
     display: block;
     padding: 10px;
     text-decoration: none;
-    background-color: #29F9F9;
+    background-color: var(--navItemColor);
 }
 
 a:hover {
     color: blue;
-    background-color: green;
+    background-color: var(--hoverColor);
 }
 
 a:active {
@@ -78,12 +77,17 @@ a:active {
     text-align-last: center;
 }
 
+#inputs > input, select {
+    box-shadow: 2px 3px 0px 1px rgba(0, 0, 0, .2), 3px 4px 20px 1px rgba(0, 0, 0, .1);
+    background-color: var(--inOutColor);
+}
+
 footer > p {
     text-align: center;
 }
 
 hr {
-    color: black;
+    color: var(--borderColor);
 }
 
 textarea {
@@ -92,10 +96,10 @@ textarea {
     border-radius: 10px;
     width: 95%;
     height: 5rem;
-    background-color: beige;
+    background-color: var(--inOutColor);
     resize: none;
     border-width: 1px;
-    border-color: black;
+    border-color: var(--borderColor);
     box-shadow: 0px 4px 0px 4px rgba(0, 0, 0, .2), 0px 5px 2px 1px rgba(0, 0, 0, .1);
 }
 
@@ -106,8 +110,4 @@ textarea {
 #textAreaOutput::selection {
     color: inherit;
     background-color: inherit;
-}
-
-@media screen and (max-width: 1023px) {
-
 }

@@ -2,6 +2,7 @@ package com.hss.cryptohash.domain.sha;
 
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
+import com.hss.cryptohash.commons.dto.PasswordMatchingResponseDTO;
 import com.hss.cryptohash.commons.exception.CryptoHashException;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
 import com.hss.cryptohash.util.ByteComparator;
@@ -28,14 +29,12 @@ public class SHA256StrategyImpl implements CryptoHashStrategy {
     }
 
     @Override
-    public void matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
+    public PasswordMatchingResponseDTO matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
         var start = Instant.now();
         var password = sha256Hex(passwordMatchingRequestDTO.rawPassword());
         var match = new ByteComparator().compare(password.getBytes(), passwordMatchingRequestDTO.encryptedPassword().getBytes());
         var end = Instant.now();
         log.info(LOG001, "match", "SHA256", Duration.between(start, end).toMillis());
-        if (match != 0) {
-            throw new CryptoHashException("Invalid password!");
-        }
+        return new PasswordMatchingResponseDTO(match);
     }
 }

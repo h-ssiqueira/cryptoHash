@@ -3,7 +3,7 @@ package com.hss.cryptohash.unit.domain.secure;
 import com.hss.cryptohash.commons.config.ConfigApplicationProperties;
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
-import com.hss.cryptohash.commons.exception.CryptoHashException;
+import com.hss.cryptohash.commons.dto.PasswordMatchingResponseDTO;
 import com.hss.cryptohash.domain.secure.BcryptStrategyImpl;
 import com.hss.cryptohash.unit.CommonsTestConstants;
 import org.junit.jupiter.api.AfterEach;
@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -49,15 +48,23 @@ class BcryptStrategyImplTest extends CommonsTestConstants {
 
     @Test
     void matches() {
-        assertThatNoException().isThrownBy(() -> bcryptStrategy.matches(new PasswordMatchingRequestDTO(rawPassword, bCryptEncryptedPassword)));
+        assertThatNoException()
+                .isThrownBy(() -> {
+                    var response = bcryptStrategy.matches(new PasswordMatchingRequestDTO(rawPassword, bCryptEncryptedPassword));
+                    assertThat(response).isNotNull()
+                            .extracting(PasswordMatchingResponseDTO::match)
+                            .isEqualTo(true);
+                });
     }
 
     @Test
     void DoesNotMatches() {
-        var request = new PasswordMatchingRequestDTO(wrongPassword, bCryptEncryptedPassword);
-        assertThatThrownBy(() -> bcryptStrategy.matches(request))
-                .isInstanceOf(CryptoHashException.class)
-                .hasMessage("Invalid password!");
+        assertThatNoException().isThrownBy(() -> {
+            var response = bcryptStrategy.matches(new PasswordMatchingRequestDTO(wrongPassword, bCryptEncryptedPassword));
+            assertThat(response).isNotNull()
+                    .extracting(PasswordMatchingResponseDTO::match)
+                    .isEqualTo(false);
+        });
     }
 
 }

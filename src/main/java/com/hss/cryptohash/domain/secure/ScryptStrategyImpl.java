@@ -3,6 +3,7 @@ package com.hss.cryptohash.domain.secure;
 import com.hss.cryptohash.commons.config.ConfigApplicationProperties;
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
+import com.hss.cryptohash.commons.dto.PasswordMatchingResponseDTO;
 import com.hss.cryptohash.commons.exception.CryptoHashException;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
 import lombok.extern.slf4j.Slf4j;
@@ -32,13 +33,11 @@ public class ScryptStrategyImpl implements CryptoHashStrategy {
     }
 
     @Override
-    public void matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
+    public PasswordMatchingResponseDTO matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
         var start = Instant.now();
         var match = scrypt.matches(passwordMatchingRequestDTO.rawPassword(), passwordMatchingRequestDTO.encryptedPassword());
         var end = Instant.now();
         log.info(LOG001, "match", "SCrypt", Duration.between(start, end).toMillis());
-        if (!match) {
-            throw new CryptoHashException("Invalid password!");
-        }
+        return new PasswordMatchingResponseDTO(match);
     }
 }

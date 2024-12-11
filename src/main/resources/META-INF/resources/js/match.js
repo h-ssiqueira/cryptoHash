@@ -2,7 +2,7 @@ document.getElementById('match').addEventListener('click', function () {
     event.preventDefault();
     const rawPass = document.getElementById('rawPassword').value;
     const hashedPass = document.getElementById('hashedPassword').value;
-    const algo = document.getElementById('dropDown').value;
+    const algo = document.getElementById('dropdown').value;
     if(!rawPass || !hashedPass) {
         console.log('Insert the necessary data!');
         return;
@@ -17,10 +17,17 @@ document.getElementById('match').addEventListener('click', function () {
         body: JSON.stringify({rawPassword: rawPass, encryptedPassword: hashedPass})
     })
         .then(response => {
-            if(!response.ok || !response.status != 400) {
-                throw new Error('Could not match passwords, server might be down!');
+            if(!response.ok) {
+                throw new Error('Could not encrypt, server might be down!');
             }
             return response.json();
+        })
+        .then(response => {
+            if(response.data.match) {
+                document.getElementById('textAreaOutput').value = 'Matched!';
+            } else {
+                document.getElementById('textAreaOutput').value = 'Not Matched!';
+            }
         })
         .catch(err => {
             console.log('Error trying to match password: ', err);

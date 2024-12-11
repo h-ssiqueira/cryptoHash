@@ -4,6 +4,7 @@ import com.hss.cryptohash.commons.config.ConfigApplicationProperties;
 import com.hss.cryptohash.commons.dto.EncryptionRequestDTO;
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
+import com.hss.cryptohash.commons.dto.PasswordMatchingResponseDTO;
 import com.hss.cryptohash.commons.strategy.Algorithm;
 import com.hss.cryptohash.commons.strategy.AlgorithmStrategyEnum;
 import com.hss.cryptohash.domain.Blake3StrategyImpl;
@@ -62,8 +63,8 @@ public class CryptoHashDelegate {
         });
     }
 
-    public void match(PasswordMatchingRequestDTO dto) {
-        this.strategy.getStrategy().matches(dto);
+    public PasswordMatchingResponseDTO match(PasswordMatchingRequestDTO dto) {
+        return this.strategy.getStrategy().matches(dto);
     }
 
     public EncryptionResponseDTO encrypt(EncryptionRequestDTO dto) {
