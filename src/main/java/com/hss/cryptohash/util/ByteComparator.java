@@ -8,12 +8,11 @@ public class ByteComparator implements Comparator<byte[]> {
     public int compare(byte[] raw, byte[] encrypted) {
         if (encrypted.length != raw.length) {
             return 1;
-        } else {
-            var result = 0;
-            for(var i = 0; encrypted.length > i; i++) {
-                result |= encrypted[i] ^ raw[i];
-            }
-            return result;
         }
+        var result = 0;
+        for(var i = 0; encrypted.length > i; i++) {
+            result |= encrypted[i] ^ raw[i];
+        }
+        return result;
     }
 }
