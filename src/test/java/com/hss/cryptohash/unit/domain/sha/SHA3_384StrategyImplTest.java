@@ -2,14 +2,13 @@ package com.hss.cryptohash.unit.domain.sha;
 
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
-import com.hss.cryptohash.commons.exception.CryptoHashException;
+import com.hss.cryptohash.commons.dto.PasswordMatchingResponseDTO;
 import com.hss.cryptohash.domain.sha.SHA3_384StrategyImpl;
 import com.hss.cryptohash.unit.CommonsTestConstants;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SHA3_384StrategyImplTest extends CommonsTestConstants {
 
@@ -26,15 +25,23 @@ class SHA3_384StrategyImplTest extends CommonsTestConstants {
 
     @Test
     void matches() {
-        assertThatNoException().isThrownBy(() -> sha3_384Strategy.matches(new PasswordMatchingRequestDTO(rawPassword, sha3_384EncryptedPassword)));
+        assertThatNoException()
+                .isThrownBy(() -> {
+                    var response = sha3_384Strategy.matches(new PasswordMatchingRequestDTO(rawPassword, sha3_384EncryptedPassword));
+                    assertThat(response).isNotNull()
+                            .extracting(PasswordMatchingResponseDTO::match)
+                            .isEqualTo(true);
+                });
     }
 
     @Test
     void DoesNotMatches() {
-        var request = new PasswordMatchingRequestDTO(wrongPassword, sha3_384EncryptedPassword);
-        assertThatThrownBy(() -> sha3_384Strategy.matches(request))
-                .isInstanceOf(CryptoHashException.class)
-                .hasMessage("Invalid password!");
+        assertThatNoException().isThrownBy(() -> {
+            var response = sha3_384Strategy.matches(new PasswordMatchingRequestDTO(wrongPassword, sha3_384EncryptedPassword));
+            assertThat(response).isNotNull()
+                    .extracting(PasswordMatchingResponseDTO::match)
+                    .isEqualTo(false);
+        });
     }
 
 }

@@ -1,0 +1,113 @@
+@charset "UTF-8";
+
+:root {
+    --backgroundColor: #20b2aa;
+    --inOutColor: #f5f5dc;
+    --borderColor: #000000;
+    --separatorColor: #BBBBBB;
+    --gradientColor: #243b35;
+    --hoverColor: #FFD700;
+    --navItemColor: #FAFAD2;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--backgroundColor);
+}
+
+::-moz-selection {
+    color: red;
+    background-color: white;
+}
+
+::selection {
+    color: red;
+    background-color: white;
+}
+
+p {
+    padding: .15rem 0;
+    line-height: 1.3rem;
+}
+
+nav {
+    background-image: linear-gradient(to bottom, var(--gradientColor), var(--backgroundColor));
+
+}
+
+ul {
+    list-style-type: none;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+li {
+    float: left;
+    text-align: center;
+    border-right: 1px solid var(--separatorColor);
+}
+
+li:last-child {
+    border-right: 2px;
+}
+
+a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    background-color: var(--navItemColor);
+}
+
+a:hover {
+    color: blue;
+    background-color: var(--hoverColor);
+}
+
+a:active {
+    color: #c00;
+}
+
+#inputs {
+    text-align-last: center;
+}
+
+#inputs > input, select {
+    box-shadow: 2px 3px 0px 1px rgba(0, 0, 0, .2), 3px 4px 20px 1px rgba(0, 0, 0, .1);
+    background-color: var(--inOutColor);
+}
+
+footer > p {
+    text-align: center;
+}
+
+hr {
+    color: var(--borderColor);
+}
+
+textarea {
+    padding: 5px;
+    margin: 15px 20px 10px 20px;
+    border-radius: 10px;
+    width: 95%;
+    height: 5rem;
+    background-color: var(--inOutColor);
+    resize: none;
+    border-width: 1px;
+    border-color: var(--borderColor);
+    box-shadow: 0px 4px 0px 4px rgba(0, 0, 0, .2), 0px 5px 2px 1px rgba(0, 0, 0, .1);
+}
+
+#textAreaOutput {
+    cursor: not-allowed;
+}
+
+#textAreaOutput::selection {
+    color: inherit;
+    background-color: inherit;
+}

@@ -3,6 +3,7 @@ package com.hss.cryptohash.domain;
 import com.hss.cryptohash.commons.config.ConfigApplicationProperties;
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
+import com.hss.cryptohash.commons.dto.PasswordMatchingResponseDTO;
 import com.hss.cryptohash.commons.exception.CryptoHashException;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
 import com.hss.cryptohash.util.ByteComparator;
@@ -34,14 +35,12 @@ public class Blake3StrategyImpl implements CryptoHashStrategy {
     }
 
     @Override
-    public void matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
+    public PasswordMatchingResponseDTO matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
         var start = Instant.now();
         var password = keyedHash(key.getBytes(), passwordMatchingRequestDTO.rawPassword().getBytes());
         var match = new ByteComparator().compare(Hex.encodeHexString(password).getBytes(), passwordMatchingRequestDTO.encryptedPassword().getBytes());
         var end = Instant.now();
         log.info(LOG001, "match", "BLAKE3", Duration.between(start, end).toMillis());
-        if (match != 0) {
-            throw new CryptoHashException("Invalid password!");
-        }
+        return new PasswordMatchingResponseDTO(match);
     }
 }

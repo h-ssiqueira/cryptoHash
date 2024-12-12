@@ -11,18 +11,20 @@
         <link rel="manifest" href="imgs/site.webmanifest">
         <link rel="stylesheet" href="style.css" defer>
         <script src="js/loadComponents.js" defer></script>
-        <script src="js/hash.js" async></script>
+        <script src="js/match.js" async></script>
         <title>Crypto Hash</title>
     </head>
     <body>
         <div id="nav"></div>
-        <h2>Password to Hash</h2>
-        <textarea autofocus aria-label="inputPassword" id="textAreaInput"></textarea>
+        <h2>Password to Match</h2>
+        <textarea autofocus aria-label="inputPassword" id="rawPassword"></textarea>
+        <h2>Encrypted Password</h2>
+        <textarea aria-label="inputEncryptedPassword" id="hashedPassword"></textarea>
         <div id="inputs">
             <select class="custom-select" aria-label="Algorithm" id="dropdown" name="dropdown"></select>
-            <input type="submit" value="Hash" id="hash">
+            <input type="submit" value="Match" id="match">
         </div>
-        <textarea readonly aria-label="outputPassword" id="textAreaOutput" onclick="copyToClipboard()"></textarea>
+        <textarea readonly aria-label="outputPassword" id="textAreaOutput"></textarea>
         <div id="footer"></div>
         <script src="js/algorithms.js" defer></script>
     </body>

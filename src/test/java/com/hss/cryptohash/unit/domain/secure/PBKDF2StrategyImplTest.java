@@ -3,7 +3,7 @@ package com.hss.cryptohash.unit.domain.secure;
 import com.hss.cryptohash.commons.config.ConfigApplicationProperties;
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
-import com.hss.cryptohash.commons.exception.CryptoHashException;
+import com.hss.cryptohash.commons.dto.PasswordMatchingResponseDTO;
 import com.hss.cryptohash.domain.secure.PBKDF2StrategyImpl;
 import com.hss.cryptohash.unit.CommonsTestConstants;
 import org.junit.jupiter.api.AfterEach;
@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -25,7 +24,7 @@ class PBKDF2StrategyImplTest extends CommonsTestConstants {
     @Mock
     private ConfigApplicationProperties.PBKDF2Properties pbkdf2Properties;
 
-    private PBKDF2StrategyImpl pbkdf2StrategyImpl;
+    private PBKDF2StrategyImpl pbkdf2Strategy;
 
     @BeforeEach
     void initMock() {
@@ -33,7 +32,7 @@ class PBKDF2StrategyImplTest extends CommonsTestConstants {
         when(pbkdf2Properties.iterations()).thenReturn(pbkdf2Iterations);
         when(pbkdf2Properties.saltLength()).thenReturn(pbkdf2SaltLength);
         when(pbkdf2Properties.secretKeyFactoryAlgorithm()).thenReturn(pbkdf2SecretKeyFactoryAlgorithm);
-        pbkdf2StrategyImpl = new PBKDF2StrategyImpl(pbkdf2Properties);
+        pbkdf2Strategy = new PBKDF2StrategyImpl(pbkdf2Properties);
     }
 
     @AfterEach
@@ -46,7 +45,7 @@ class PBKDF2StrategyImplTest extends CommonsTestConstants {
 
     @Test
     void encrypt() {
-        var response = pbkdf2StrategyImpl.encrypt(rawPassword);
+        var response = pbkdf2Strategy.encrypt(rawPassword);
 
         assertThat(response).isNotNull()
                 .extracting(EncryptionResponseDTO::passwordEncrypted)
@@ -55,15 +54,23 @@ class PBKDF2StrategyImplTest extends CommonsTestConstants {
 
     @Test
     void matches() {
-        assertThatNoException().isThrownBy(() -> pbkdf2StrategyImpl.matches(new PasswordMatchingRequestDTO(rawPassword, pbkdf2EncryptedPassword)));
+        assertThatNoException()
+                .isThrownBy(() -> {
+                    var response = pbkdf2Strategy.matches(new PasswordMatchingRequestDTO(rawPassword, pbkdf2EncryptedPassword));
+                    assertThat(response).isNotNull()
+                            .extracting(PasswordMatchingResponseDTO::match)
+                            .isEqualTo(true);
+                });
     }
 
     @Test
     void DoesNotMatches() {
-        var request = new PasswordMatchingRequestDTO(wrongPassword, pbkdf2EncryptedPassword);
-        assertThatThrownBy(() -> pbkdf2StrategyImpl.matches(request))
-                .isInstanceOf(CryptoHashException.class)
-                .hasMessage("Invalid password!");
+        assertThatNoException().isThrownBy(() -> {
+            var response = pbkdf2Strategy.matches(new PasswordMatchingRequestDTO(wrongPassword, pbkdf2EncryptedPassword));
+            assertThat(response).isNotNull()
+                    .extracting(PasswordMatchingResponseDTO::match)
+                    .isEqualTo(false);
+        });
     }
 
 }

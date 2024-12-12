@@ -57,8 +57,7 @@ public class CryptoHashController {
         try {
             log.debug("{} match", algorithm);
             cryptoHashDelegate.setStrategy(algorithm);
-            cryptoHashDelegate.match(passwordMatchingRequestDTO);
-            return Response.ok().build();
+            return Response.ok(new GeneralResponseDTO<>(cryptoHashDelegate.match(passwordMatchingRequestDTO))).build();
         } catch (Exception ex) {
             log.error(ex.getMessage());
             throw new CryptoHashException(ex);
