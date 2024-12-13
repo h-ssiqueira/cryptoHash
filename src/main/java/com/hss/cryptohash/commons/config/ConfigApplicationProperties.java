@@ -5,13 +5,34 @@ import io.smallrye.config.ConfigMapping;
 @ConfigMapping(prefix = "hash")
 public interface ConfigApplicationProperties {
 
+    SparkleProperties sparkle();
+    SkeinProperties skein();
+    Blake2bpProperties blake2bp();
+    Blake2spProperties blake2sp();
     Blake3Properties blake3();
     PBKDF2Properties pbkdf2();
     SCryptProperties scrypt();
     Argon2Properties argon2();
     BCryptProperties bcrypt();
 
-    public interface Blake3Properties {
+    interface SparkleProperties {
+        String param();
+    }
+
+    interface SkeinProperties {
+        int outputSize();
+        int blockSize();
+    }
+
+    interface Blake2bpProperties {
+        String key();
+    }
+
+    interface Blake2spProperties {
+        String key();
+    }
+
+    interface Blake3Properties {
         String key();
     }
 

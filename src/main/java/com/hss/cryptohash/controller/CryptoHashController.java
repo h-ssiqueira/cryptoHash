@@ -68,7 +68,7 @@ public class CryptoHashController {
     @Path("/algorithms")
     @Produces(APPLICATION_JSON)
     public Response getAlgorithms() {
-        var list = Arrays.stream(AlgorithmStrategyEnum.values()).map(AlgorithmStrategyEnum::toString).toList();
+        var list = Arrays.stream(AlgorithmStrategyEnum.values()).map(AlgorithmStrategyEnum::toString).sorted().toList();
         return Response.ok().entity(new GeneralResponseDTO<>(new AlgorithmListResponseDTO(list))).build();
     }
 

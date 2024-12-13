@@ -1,10 +1,10 @@
-package com.hss.cryptohash.unit.domain;
+package com.hss.cryptohash.unit.domain.blake;
 
 import com.hss.cryptohash.commons.config.ConfigApplicationProperties;
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingResponseDTO;
-import com.hss.cryptohash.domain.Blake3StrategyImpl;
+import com.hss.cryptohash.domain.blake.Blake2bpStrategyImpl;
 import com.hss.cryptohash.unit.CommonsTestConstants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,38 +19,38 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class Blake3StrategyImplTest extends CommonsTestConstants {
+class Blake2bpStrategyImplTest extends CommonsTestConstants {
 
     @Mock
-    private ConfigApplicationProperties.Blake3Properties blake3Properties;
+    private ConfigApplicationProperties.Blake2bpProperties blake2bpProperties;
 
-    private Blake3StrategyImpl blake3Strategy;
+    private Blake2bpStrategyImpl blake2bpStrategy;
 
     @BeforeEach
     void initMock() {
-        when(blake3Properties.key()).thenReturn(blake3Key);
-        blake3Strategy = new Blake3StrategyImpl(blake3Properties);
+        when(blake2bpProperties.key()).thenReturn(blake2bpKey);
+        blake2bpStrategy = new Blake2bpStrategyImpl(blake2bpProperties);
     }
 
     @AfterEach
     void verifyMock() {
-        verify(blake3Properties).key();
+        verify(blake2bpProperties).key();
     }
 
     @Test
     void encrypt() {
-        var response = blake3Strategy.encrypt(rawPassword);
+        var response = blake2bpStrategy.encrypt(rawPassword);
 
         assertThat(response).isNotNull()
                 .extracting(EncryptionResponseDTO::passwordEncrypted)
-                .isEqualTo(blake3EncryptedPassword);
+                .isEqualTo(blake2bpEncryptedPassword);
     }
 
     @Test
     void matches() {
         assertThatNoException()
                 .isThrownBy(() -> {
-                    var response = blake3Strategy.matches(new PasswordMatchingRequestDTO(rawPassword, blake3EncryptedPassword));
+                    var response = blake2bpStrategy.matches(new PasswordMatchingRequestDTO(rawPassword, blake2bpEncryptedPassword));
                     assertThat(response).isNotNull()
                             .extracting(PasswordMatchingResponseDTO::match)
                             .isEqualTo(true);
@@ -60,7 +60,7 @@ class Blake3StrategyImplTest extends CommonsTestConstants {
     @Test
     void DoesNotMatches() {
         assertThatNoException().isThrownBy(() -> {
-            var response = blake3Strategy.matches(new PasswordMatchingRequestDTO(wrongPassword, blake3EncryptedPassword));
+            var response = blake2bpStrategy.matches(new PasswordMatchingRequestDTO(wrongPassword, blake2bpEncryptedPassword));
             assertThat(response).isNotNull()
                     .extracting(PasswordMatchingResponseDTO::match)
                     .isEqualTo(false);
