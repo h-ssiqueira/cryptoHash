@@ -30,5 +30,18 @@ public enum AlgorithmStrategyEnum {
     BLAKE2S,
     BLAKE2SP,
     BLAKE2XS,
-    BLAKE3;
+    BLAKE3,
+    GOST3411,
+    GOST3411_2012_256,
+    GOST3411_2012_512,
+    RIPEMD128,
+    RIPEMD160,
+    RIPEMD256,
+    RIPEMD320,
+    CSHAKE,
+    ASCON,
+    DSTU7564,
+    ISAP,
+    KECCAK,
+    PHOTONBEETLE;
 }

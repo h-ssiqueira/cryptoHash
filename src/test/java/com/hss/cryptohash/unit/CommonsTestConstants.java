@@ -79,4 +79,31 @@ public abstract class CommonsTestConstants {
     protected static final String whirlpoolEncryptedPassword = "6a4e012bd9583858a5a6fa15f58bd86a25af266d3a4344f1ec2018b778f29ba83be86eb45e6dc204e11276f4a99eff4e2144fbe15e756c2c88e999649aae7d94";
     protected static final String xoodyakEncryptedPassword = "caf55000e1713930afe1839ed43f43908eec746e73b2f43644b776d193492d5a";
 
+    // Gost3411
+    protected static final String gost3411_2012_256EncryptedPassword = "44f213f36bb3395a56907df0493c7d38e843ee24c9588178b043115f882d9ff7";
+    protected static final String gost3411_2012_512EncryptedPassword = "ce8171e7e1802e13d361269025f7f2d108cfa51e3890464d3491bbe1ce3f1b07dddd1723c22cbe6d0eed5226c3ee765a5611807f92ed92bfd8d75c33762949ae";
+    protected static final String gost3411EncryptedPassword = "a15fd34ab1329ccc4907e554cf43304d1bdb38e0382b63827062dfcb9caad299";
+
+    // RIPEMD
+    protected static final String RIPEMD128EncryptedPassword = "ed4060702b42311eb4f6c707b11f1999";
+    protected static final String RIPEMD160EncryptedPassword = "7dd12f3a9afa0282a575b8ef99dea2a0c1becb51";
+    protected static final String RIPEMD256EncryptedPassword = "f87f405941cf41f0c2b5b1939e8a1f9edac7e03c7ceb1491ca5ef467f3bdc6db";
+    protected static final String RIPEMD320EncryptedPassword = "960a7b8e2061b3b9eb87e882d0b1953e9a144b1c780c503c0fb2d3d9c6bb1e4febf78b55e1a37780";
+
+    // CSHAKE
+    protected static final String cshakeEncryptedPassword = "6a127af4f5ae62e7e1d707ed58c8574bb44ec0ec41b29fae6b104dabd72d5c88db9042d277765f0a6ba502ef0dfc4a30eda6fe09586b0d0be79f2bbf125dcf2e";
+    protected static final int cshakeBitStrength = 256;
+
+    // Ascon
+    protected static final String asconEncryptedPassword = "060523d7a9b954d4320ed0554dd3e6b1cb29126afe124deec96b814504630db4";
+    protected static final String asconAlgorithm = "AsconHash";
+
+    // DSTU7564
+    protected static final String dstu7564EncryptedPassword = "24db15ce3eed1f373cbc8d3c253b5a9dcd0768abece9ee8015319ce1d5ac1cad";
+    protected static final int dstu7564HashSize = 256;
+
+    protected static final String isapEncryptedPassword = "060523d7a9b954d4320ed0554dd3e6b1cb29126afe124deec96b814504630db4";
+    protected static final String keccakEncryptedPassword = "9f290a8c6ee4cb54fa6234d468bc413ef82655fc6aa8bfafb3a45fef1c6886fe5271a8b6";
+    protected static final String photonBeetleEncryptedPassword = "3883dd1f2927c106546be30fe2bc95c5078dad73a0d10a905583083306e20b80";
+
 }

@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.hasSize;
 class ControllerTest {
 
     private static final String BASE_URL = "http://localhost:8080/api/v1/%s";
-    static final List<String> ALGORITHMS = Arrays.stream(AlgorithmStrategyEnum.values()).map(AlgorithmStrategyEnum::toString).toList();
+    static final List<String> ALGORITHMS = Arrays.stream(AlgorithmStrategyEnum.values()).map(AlgorithmStrategyEnum::toString).sorted().toList();
 
     @Test
     @DisplayName("Should Validate Available Algorithms")

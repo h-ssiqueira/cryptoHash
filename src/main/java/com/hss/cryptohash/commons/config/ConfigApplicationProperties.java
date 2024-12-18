@@ -5,6 +5,9 @@ import io.smallrye.config.ConfigMapping;
 @ConfigMapping(prefix = "hash")
 public interface ConfigApplicationProperties {
 
+    DSTU7564Properties dstu7564();
+    AsconProperties ascon();
+    CSHAKEProperties cshake();
     SparkleProperties sparkle();
     SkeinProperties skein();
     Blake2bpProperties blake2bp();
@@ -14,6 +17,18 @@ public interface ConfigApplicationProperties {
     SCryptProperties scrypt();
     Argon2Properties argon2();
     BCryptProperties bcrypt();
+
+    interface DSTU7564Properties {
+        int hashSize();
+    }
+
+    interface AsconProperties {
+        String algorithm();
+    }
+
+    interface CSHAKEProperties {
+        int bitStrength();
+    }
 
     interface SparkleProperties {
         String param();

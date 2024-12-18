@@ -1,33 +1,33 @@
-package com.hss.cryptohash.unit.domain;
+package com.hss.cryptohash.unit.domain.gost3411;
 
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingResponseDTO;
-import com.hss.cryptohash.domain.SHAKEStrategyImpl;
+import com.hss.cryptohash.domain.gost3411.GOST3411StrategyImpl;
 import com.hss.cryptohash.unit.CommonsTestConstants;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
-class SHAKEStrategyImplTest extends CommonsTestConstants {
+class GOST3411StrategyImplTest extends CommonsTestConstants {
 
-    private final SHAKEStrategyImpl shakeStrategy = new SHAKEStrategyImpl();
+    private final GOST3411StrategyImpl gost3411Strategy = new GOST3411StrategyImpl();
 
     @Test
     void encrypt() {
-        var response = shakeStrategy.encrypt(rawPassword);
+        var response = gost3411Strategy.encrypt(rawPassword);
 
         assertThat(response).isNotNull()
                 .extracting(EncryptionResponseDTO::passwordEncrypted)
-                .isEqualTo(shakeEncryptedPassword);
+                .isEqualTo(gost3411EncryptedPassword);
     }
 
     @Test
     void matches() {
         assertThatNoException()
                 .isThrownBy(() -> {
-                    var response = shakeStrategy.matches(new PasswordMatchingRequestDTO(rawPassword, shakeEncryptedPassword));
+                    var response = gost3411Strategy.matches(new PasswordMatchingRequestDTO(rawPassword, gost3411EncryptedPassword));
                     assertThat(response).isNotNull()
                             .extracting(PasswordMatchingResponseDTO::match)
                             .isEqualTo(true);
@@ -37,11 +37,10 @@ class SHAKEStrategyImplTest extends CommonsTestConstants {
     @Test
     void DoesNotMatches() {
         assertThatNoException().isThrownBy(() -> {
-            var response = shakeStrategy.matches(new PasswordMatchingRequestDTO(wrongPassword, shakeEncryptedPassword));
+            var response = gost3411Strategy.matches(new PasswordMatchingRequestDTO(wrongPassword, gost3411EncryptedPassword));
             assertThat(response).isNotNull()
                     .extracting(PasswordMatchingResponseDTO::match)
                     .isEqualTo(false);
         });
     }
-
 }

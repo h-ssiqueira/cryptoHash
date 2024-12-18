@@ -27,22 +27,22 @@ public class XoodyakStrategyImpl implements CryptoHashStrategy {
         var encrypted = encrypt(password.getBytes());
         var end = Instant.now();
         log.info(LOG001, "encrypt", "XOODYAK", Duration.between(start, end).toMillis());
-        return new EncryptionResponseDTO(toHexString(encrypted));
+        return new EncryptionResponseDTO(encrypted);
     }
 
     @Override
     public PasswordMatchingResponseDTO matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
         var start = Instant.now();
-        var match = new ByteComparator().compare(toHexString(encrypt(passwordMatchingRequestDTO.rawPasswordBytes())).getBytes(), passwordMatchingRequestDTO.encryptedPasswordBytes());
+        var match = new ByteComparator().compare(encrypt(passwordMatchingRequestDTO.rawPasswordBytes()).getBytes(), passwordMatchingRequestDTO.encryptedPasswordBytes());
         var end = Instant.now();
         log.info(LOG001, "match", "XOODYAK", Duration.between(start, end).toMillis());
         return new PasswordMatchingResponseDTO(match);
     }
 
-    private byte[] encrypt(byte[] text) {
+    private String encrypt(byte[] text) {
         xoodyakStrategy.update(text,0,text.length);
         var encrypted = new byte[xoodyakStrategy.getDigestSize()];
         xoodyakStrategy.doFinal(encrypted,0);
-        return encrypted;
+        return toHexString(encrypted);
     }
 }
