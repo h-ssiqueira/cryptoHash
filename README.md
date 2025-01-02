@@ -1,56 +1,34 @@
-# cryptoHash
+# CryptoHash
+![Java 23](https://img.shields.io/badge/Java_23-000000?style=for-the-badge&logo=openjdk&logoColor=white)
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+![Quarkus](https://img.shields.io/badge/Quarkus-4695EB?style=for-the-badge&logo=quarkus&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+![junit5](https://img.shields.io/badge/junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white)
 
-## Running the application in dev mode
+- Encode and match passwords using hash functions.
+## Executing
 
-You can run your application in dev mode that enables live coding using:
 ```shell script
 ./mvnw compile quarkus:dev
 ```
+- Access the site [here](http://localhost:8080).
+___
+## Available Hash Algorithms
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+> Feel free to add more by opening a pull request.
 
-## Packaging and running the application
+Subgroup | Algorithm
+:---: | :---:
+BLAKE | BLAKE2B<br>BLAKE2BP<br>BLAKE2S<br>BLAKE2SP<br>BLAKE2XS<br>BLAKE3
+Gost3411 | GOST3411<br>GOST3411_2012_256<br>GOST3411_2012_512
+MD | MD2<br>MD4<br>MD5
+Ripemd | RIPEMD128<br>RIPEMD160<br>RIPEMD256<br>RIPEMD320
+Secure | ARGON2<br>BCRYPT<br>SCRYPT<br>PBKDF2
+SHA | SHA1<br>SHA256<br>SHA3_224<br>SHA3_256<br>SHA3_384<br>SHA3_512<br>SHA384<br>SHA512_224<br>SHA512_256<br>SHA512
+SHAKE | CSHAKE<br>SHAKE
+Others | ASCON<br>DSTU7564<br>ISAP<br>KECCAK<br>PHOTONBEETLE<br>SKEIN<br>SM3<br>SPARKLE<br>TIGER<br>WHIRLPOOL<br>XOODYAK
 
-The application can be packaged using:
-```shell script
-./mvnw package
-```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
 
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
-```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using: 
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/cryptoHash-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
-
-## Provided Code
-
-### RESTEasy Reactive
-
-Easily start your Reactive RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)

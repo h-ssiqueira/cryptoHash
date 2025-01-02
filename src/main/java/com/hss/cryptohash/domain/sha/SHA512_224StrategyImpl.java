@@ -3,7 +3,6 @@ package com.hss.cryptohash.domain.sha;
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingResponseDTO;
-import com.hss.cryptohash.commons.exception.CryptoHashException;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
 import com.hss.cryptohash.util.ByteComparator;
 import lombok.NoArgsConstructor;
@@ -32,7 +31,7 @@ public class SHA512_224StrategyImpl implements CryptoHashStrategy {
     public PasswordMatchingResponseDTO matches(PasswordMatchingRequestDTO passwordMatchingRequestDTO) {
         var start = Instant.now();
         var password = sha512_224Hex(passwordMatchingRequestDTO.rawPassword());
-        var match = new ByteComparator().compare(password.getBytes(), passwordMatchingRequestDTO.encryptedPassword().getBytes());
+        var match = new ByteComparator().compare(password.getBytes(), passwordMatchingRequestDTO.encryptedPasswordBytes());
         var end = Instant.now();
         log.info(LOG001, "match", "SHA512 224", Duration.between(start, end).toMillis());
         return new PasswordMatchingResponseDTO(match);

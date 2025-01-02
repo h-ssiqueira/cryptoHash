@@ -4,7 +4,6 @@ import com.hss.cryptohash.commons.config.ConfigApplicationProperties;
 import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingResponseDTO;
-import com.hss.cryptohash.commons.exception.CryptoHashException;
 import com.hss.cryptohash.spec.CryptoHashStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
