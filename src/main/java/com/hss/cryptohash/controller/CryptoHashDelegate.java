@@ -6,7 +6,7 @@ import com.hss.cryptohash.commons.dto.EncryptionResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingResponseDTO;
 import com.hss.cryptohash.commons.strategy.Algorithm;
-import com.hss.cryptohash.commons.strategy.AlgorithmStrategyEnum;
+import com.hss.cryptohash.commons.strategy.Algorithm.AlgorithmStrategyEnum;
 import com.hss.cryptohash.domain.AsconStrategyImpl;
 import com.hss.cryptohash.domain.DSTU7564StrategyImpl;
 import com.hss.cryptohash.domain.ISAPStrategyImpl;

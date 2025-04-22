@@ -19,5 +19,7 @@ jobs:
         java-version: '23'
         distribution: 'temurin'
         cache: maven
-    - name: Build and Test
-      run: ./mvnw compile quarkus:test
+    - name: Build
+      run: ./mvnw install -DskipTests
+    - name: Test
+      run: ./mvnw verify

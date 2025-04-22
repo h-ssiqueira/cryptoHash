@@ -1,8 +1,10 @@
 package com.hss.cryptohash.integration;
 
-import com.hss.cryptohash.commons.strategy.AlgorithmStrategyEnum;
+import com.hss.cryptohash.commons.strategy.Algorithm.AlgorithmStrategyEnum;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,10 +22,15 @@ import static org.hamcrest.Matchers.hasSize;
 
 @Slf4j
 @QuarkusTest
-class ControllerTest {
+class ControllerTestIT {
 
-    private static final String BASE_URL = "http://localhost:8080/api/v1/%s";
-    static final List<String> ALGORITHMS = Arrays.stream(AlgorithmStrategyEnum.values()).map(AlgorithmStrategyEnum::toString).sorted().toList();
+    private static final String BASE_URL = "/api/v1/%s";
+    private static final List<String> ALGORITHMS = Arrays.stream(AlgorithmStrategyEnum.values()).map(AlgorithmStrategyEnum::toString).sorted().toList();
+
+    @BeforeAll
+    static void setup() {
+        RestAssured.baseURI = "http://localhost";
+    }
 
     @Test
     @DisplayName("Should Validate Available Algorithms")
