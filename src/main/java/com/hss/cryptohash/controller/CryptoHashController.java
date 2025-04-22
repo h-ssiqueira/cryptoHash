@@ -5,7 +5,7 @@ import com.hss.cryptohash.commons.dto.EncryptionRequestDTO;
 import com.hss.cryptohash.commons.dto.GeneralResponseDTO;
 import com.hss.cryptohash.commons.dto.PasswordMatchingRequestDTO;
 import com.hss.cryptohash.commons.exception.CryptoHashException;
-import com.hss.cryptohash.commons.strategy.AlgorithmStrategyEnum;
+import com.hss.cryptohash.commons.strategy.Algorithm.AlgorithmStrategyEnum;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.validation.Valid;
