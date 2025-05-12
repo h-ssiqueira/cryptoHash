@@ -1,9 +1,20 @@
-FROM quay.io/quarkus/quarkus-micro-image:2.0
+FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21 AS build
+
+WORKDIR /app
+
+COPY pom.xml /app
+COPY src /app/src
+COPY .mvn /app/.mvn
+COPY mvnw /app
+
+RUN ./mvnw package -Dnative
+###################################################################
+FROM quay.io/quarkus/quarkus-micro-image:2.0 AS runtime
 WORKDIR /work/
 RUN chown 1001 /work \
     && chmod "g+rwX" /work \
     && chown 1001:root /work
-COPY --chown=1001:root target/*-runner /work/application
+COPY --from=build --chown=1001:root /app/target/*-runner /work/application
 
 EXPOSE 8080
 USER 1001
