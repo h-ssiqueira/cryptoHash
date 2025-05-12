@@ -1,5 +1,6 @@
 # CryptoHash
-![Java 21](https://img.shields.io/badge/Java_23-000000?style=for-the-badge&logo=openjdk&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Java 21](https://img.shields.io/badge/Java_21-000000?style=for-the-badge&logo=openjdk&logoColor=white)
 
 ![Quarkus](https://img.shields.io/badge/Quarkus-4695EB?style=for-the-badge&logo=quarkus&logoColor=white)
 ![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
@@ -8,12 +9,13 @@
 
 - Encode and match passwords using hash functions.
 ## Executing
+### Docker compose
+```shell
+docker-compose up --build
+```
+- Access the site [here](http://localhost:9999).
 ### Docker
 #### JVM
-- Compile
-```shell
-./mvnw package
-```
 - Generate image
 ```shell
 docker build -f src/main/docker/Dockerfile.jvm -t quarkus/cryptohash-jvm .
@@ -22,11 +24,8 @@ docker build -f src/main/docker/Dockerfile.jvm -t quarkus/cryptohash-jvm .
 ```shell
 docker run -i --rm -p 8080:8080 quarkus/cryptohash-jvm
 ```
+- Access the site [here](http://localhost:8080).
 #### Legacy JAR
-- Compile
-```shell
-./mvnw package -Dquarkus.package.type=legacy-jar
-```
 - Generate image
 ```shell
 docker build -f src/main/docker/Dockerfile.legacy-jar -t quarkus/cryptohash-legacy-jar .
@@ -35,11 +34,8 @@ docker build -f src/main/docker/Dockerfile.legacy-jar -t quarkus/cryptohash-lega
 ```shell
 docker run -i --rm -p 8080:8080 quarkus/cryptohash-legacy-jar
 ```
+- Access the site [here](http://localhost:8080).
 #### Native
-- Compile
-```shell
-./mvnw package -Dnative
-```
 - Generate image
 ```shell
 docker build -f src/main/docker/Dockerfile.native -t quarkus/cryptohash .
@@ -48,11 +44,8 @@ docker build -f src/main/docker/Dockerfile.native -t quarkus/cryptohash .
 ```shell
 docker run -i --rm -p 8080:8080 quarkus/cryptohash
 ```
+- Access the site [here](http://localhost:8080).
 #### Native micro
-- Compile
-```shell
-    ./mvnw package -Dnative
-```
 - Generate image
 ```shell
 docker build -f src/main/docker/Dockerfile.native-micro -t quarkus/cryptohash .
@@ -61,6 +54,7 @@ docker build -f src/main/docker/Dockerfile.native-micro -t quarkus/cryptohash .
 ```shell
 docker run -i --rm -p 8080:8080 quarkus/cryptohash
 ```
+- Access the site [here](http://localhost:8080).
 ### Command line
 ```shell script
 ./mvnw compile quarkus:dev

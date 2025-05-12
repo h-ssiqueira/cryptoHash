@@ -62,13 +62,23 @@
 #   accessed directly. (example: "foo.example.com,bar.example.com")
 #
 ###
-FROM registry.access.redhat.com/ubi9/openjdk-21:1.22
+FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21 AS build
+
+WORKDIR /app
+
+COPY pom.xml /app
+COPY src /app/src
+COPY .mvn /app/.mvn
+COPY mvnw /app
+
+RUN ./mvnw package -Dquarkus.package.type=legacy-jar
+###################################################################
+FROM registry.access.redhat.com/ubi9/openjdk-21:1.22 AS runtime
 
 ENV LANGUAGE='en_US:en'
 
-
-COPY target/lib/* /deployments/lib/
-COPY target/*-runner.jar /deployments/quarkus-run.jar
+COPY --from=build app/target/lib/* /deployments/lib/
+COPY --from=build app/target/*-runner.jar /deployments/quarkus-run.jar
 
 EXPOSE 8080
 USER 185
