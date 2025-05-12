@@ -1,5 +1,5 @@
 # CryptoHash
-![Java 23](https://img.shields.io/badge/Java_23-000000?style=for-the-badge&logo=openjdk&logoColor=white)
+![Java 21](https://img.shields.io/badge/Java_23-000000?style=for-the-badge&logo=openjdk&logoColor=white)
 
 ![Quarkus](https://img.shields.io/badge/Quarkus-4695EB?style=for-the-badge&logo=quarkus&logoColor=white)
 ![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
@@ -8,7 +8,60 @@
 
 - Encode and match passwords using hash functions.
 ## Executing
-
+### Docker
+#### JVM
+- Compile
+```shell
+./mvnw package
+```
+- Generate image
+```shell
+docker build -f src/main/docker/Dockerfile.jvm -t quarkus/cryptohash-jvm .
+```
+- Execute
+```shell
+docker run -i --rm -p 8080:8080 quarkus/cryptohash-jvm
+```
+#### Legacy JAR
+- Compile
+```shell
+./mvnw package -Dquarkus.package.type=legacy-jar
+```
+- Generate image
+```shell
+docker build -f src/main/docker/Dockerfile.legacy-jar -t quarkus/cryptohash-legacy-jar .
+```
+- Execute
+```shell
+docker run -i --rm -p 8080:8080 quarkus/cryptohash-legacy-jar
+```
+#### Native
+- Compile
+```shell
+./mvnw package -Dnative
+```
+- Generate image
+```shell
+docker build -f src/main/docker/Dockerfile.native -t quarkus/cryptohash .
+```
+- Execute
+```shell
+docker run -i --rm -p 8080:8080 quarkus/cryptohash
+```
+#### Native micro
+- Compile
+```shell
+    ./mvnw package -Dnative
+```
+- Generate image
+```shell
+docker build -f src/main/docker/Dockerfile.native-micro -t quarkus/cryptohash .
+```
+- Execute
+```shell
+docker run -i --rm -p 8080:8080 quarkus/cryptohash
+```
+### Command line
 ```shell script
 ./mvnw compile quarkus:dev
 ```
@@ -28,7 +81,3 @@ Secure | ARGON2<br>BCRYPT<br>SCRYPT<br>PBKDF2
 SHA | SHA1<br>SHA256<br>SHA3_224<br>SHA3_256<br>SHA3_384<br>SHA3_512<br>SHA384<br>SHA512_224<br>SHA512_256<br>SHA512
 SHAKE | CSHAKE<br>SHAKE
 Others | ASCON<br>DSTU7564<br>ISAP<br>KECCAK<br>PHOTONBEETLE<br>SKEIN<br>SM3<br>SPARKLE<br>TIGER<br>WHIRLPOOL<br>XOODYAK
-
-
-
-
