@@ -1,0 +1,253 @@
+openapi: 3.0.3
+info:
+  title: Swagger Crypto Hash
+  description: |-
+    Simple Hashing application
+  contact:
+    email: hss@outlook.com.br
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+  - url: https://localhost
+tags:
+  - name: Hash
+    description: Hashing APIs
+paths:
+  /api/v1/encrypt:
+    post:
+      tags:
+        - Hash
+      summary: Encrypt a message
+      description: Encrypts a message using one of available algorithms
+      operationId: encrypt
+      parameters:
+        - $ref: "#/components/parameters/Algorithm"
+      requestBody:
+        description: Encrypt a message
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/EncryptResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '415':
+          $ref: '#/components/responses/InvalidMediaType'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/match:
+    post:
+      tags:
+        - Hash
+      summary: Check a message agains a hash
+      description: Check if the message and hash are equal
+      operationId: match
+      parameters:
+        - $ref: "#/components/parameters/Algorithm"
+      requestBody:
+        description: Hash and message body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/MatchResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '415':
+          $ref: '#/components/responses/InvalidMediaType'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /api/v1/algorithms:
+    get:
+      tags:
+        - Hash
+      summary: Retrieve available algorithms
+      description: Retrieves a list of available hashing algorithms
+      operationId: algorithms
+      responses:
+        '200':
+          $ref: '#/components/responses/AlgorithmsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '406':
+          $ref: '#/components/responses/NotAcceptable'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    ProblemDetail:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          example: "https://example.com/probs/empty-param"
+        title:
+          type: string
+          example: "Field cannot be empty"
+        status:
+          type: integer
+          example: 4xx
+        detail:
+          type: string
+          example: "The password field cannot be empty"
+        instance:
+          type: string
+          example: "/encrypt"
+    EncryptRequest:
+      type: object
+      required: [password]
+      properties:
+        password:
+          type: string
+          minLength: 1
+    MatchRequest:
+      type: object
+      required: [rawPassword, encryptedPassword]
+      properties:
+        rawPassword:
+          type: string
+          minLength: 1
+        encryptedPassword:
+          type: string
+          minLength: 1
+    Algorithm:
+      type: string
+      enum: [
+        ARGON2,
+        BCRYPT,
+        SCRYPT,
+        PBKDF2,
+        MD2,
+        MD4,
+        MD5,
+        SHA1,
+        SHA256,
+        SHA3_224,
+        SHA3_256,
+        SHA3_384,
+        SHA3_512,
+        SHA384,
+        SHA512_224,
+        SHA512_256,
+        SHA512,
+        SHAKE,
+        SKEIN,
+        SM3,
+        SPARKLE,
+        TIGER,
+        WHIRLPOOL,
+        XOODYAK,
+        BLAKE2B,
+        BLAKE2BP,
+        BLAKE2S,
+        BLAKE2SP,
+        BLAKE2XS,
+        BLAKE3,
+        GOST3411,
+        GOST3411_2012_256,
+        GOST3411_2012_512,
+        RIPEMD128,
+        RIPEMD160,
+        RIPEMD256,
+        RIPEMD320,
+        CSHAKE,
+        ASCON,
+        DSTU7564,
+        ISAP,
+        KECCAK,
+        PHOTONBEETLE]
+  parameters:
+    Algorithm:
+      name: algorithm
+      description: Algorithm to be encrypted
+      in: query
+      required: true
+      schema:
+        $ref: '#/components/schemas/Algorithm'
+  responses:
+    EncryptResponse:
+      description: Encrypted message response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  passwordEncrypted:
+                    type: string
+    MatchResponse:
+      description: List of available algorithms
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  match:
+                    type: boolean
+    AlgorithmsResponse:
+      description: List of available algorithms
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  algorithms:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Algorithm'
+    BadRequest:
+      description: Bad request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+    MethodNotAllowed:
+      description: Method not allowed
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+    NotAcceptable:
+      description: Not acceptable
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+    InvalidMediaType:
+      description: Invalid media type
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
