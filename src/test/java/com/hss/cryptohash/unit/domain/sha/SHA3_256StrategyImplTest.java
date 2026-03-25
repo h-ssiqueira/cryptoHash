@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
+@SuppressWarnings("NewClassNamingConvention")
 class SHA3_256StrategyImplTest extends CommonsTestConstants {
 
     private final SHA3_256StrategyImpl sha3_256Strategy = new SHA3_256StrategyImpl();

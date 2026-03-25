@@ -3,6 +3,7 @@ package com.hss.cryptohash.commons.exception;
 import lombok.Getter;
 
 @Getter
+@SuppressWarnings("unused")
 public class CryptoHashException extends RuntimeException {
 
     private final String clazz;

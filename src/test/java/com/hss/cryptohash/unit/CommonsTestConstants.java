@@ -1,6 +1,7 @@
 package com.hss.cryptohash.unit;
 
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import static java.nio.file.Files.readString;
 
@@ -58,9 +59,9 @@ public abstract class CommonsTestConstants {
     protected static final String blake2xsEncryptedPassword;
 
     static {
-        String content = "";
+        var content = "";
         try {
-            content = readString(Paths.get(CommonsTestConstants.class.getClassLoader().getResource("blake2xsEncryptedPassword.txt").toURI()));
+            content = readString(Paths.get(Objects.requireNonNull(CommonsTestConstants.class.getClassLoader().getResource("blake2xsEncryptedPassword.txt")).toURI()));
         } catch (Exception ignored) {}
         blake2xsEncryptedPassword = content;
     }

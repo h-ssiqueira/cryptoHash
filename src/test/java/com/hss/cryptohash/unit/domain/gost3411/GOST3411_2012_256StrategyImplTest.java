@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
+@SuppressWarnings("NewClassNamingConvention")
 class GOST3411_2012_256StrategyImplTest extends CommonsTestConstants {
 
     private final GOST3411_2012_256StrategyImpl gost3411_2012_256Strategy = new GOST3411_2012_256StrategyImpl();

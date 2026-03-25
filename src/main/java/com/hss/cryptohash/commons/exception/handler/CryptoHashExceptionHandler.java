@@ -13,6 +13,7 @@ import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
 
 @Provider
 @Slf4j
+@SuppressWarnings("unused")
 public class CryptoHashExceptionHandler implements ExceptionMapper<CryptoHashException> {
 
     @Override

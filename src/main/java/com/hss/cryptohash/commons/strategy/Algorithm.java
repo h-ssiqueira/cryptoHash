@@ -4,6 +4,7 @@ import com.hss.cryptohash.spec.CryptoHashStrategy;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@SuppressWarnings("unused")
 @Data
 @NoArgsConstructor
 public class Algorithm {
@@ -53,6 +54,6 @@ public class Algorithm {
         DSTU7564,
         ISAP,
         KECCAK,
-        PHOTONBEETLE;
+        PHOTONBEETLE
     }
 }

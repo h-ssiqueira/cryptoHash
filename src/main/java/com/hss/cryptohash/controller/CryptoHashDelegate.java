@@ -54,6 +54,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 @Singleton
+@SuppressWarnings("unused")
 public class CryptoHashDelegate {
 
     private final ConfigApplicationProperties properties;

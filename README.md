@@ -1,6 +1,6 @@
 # CryptoHash
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![Java 21](https://img.shields.io/badge/Java_21-000000?style=for-the-badge&logo=openjdk&logoColor=white)
+![Java 25](https://img.shields.io/badge/Java_25-000000?style=for-the-badge&logo=openjdk&logoColor=white)
 
 ![Quarkus](https://img.shields.io/badge/Quarkus-4695EB?style=for-the-badge&logo=quarkus&logoColor=white)
 ![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)

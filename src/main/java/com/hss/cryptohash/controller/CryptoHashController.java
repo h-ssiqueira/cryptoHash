@@ -25,6 +25,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 @Slf4j
 @Singleton
 @Path("/api/v1")
+@SuppressWarnings("unused")
 public class CryptoHashController {
 
     private final CryptoHashDelegate cryptoHashDelegate;

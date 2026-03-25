@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
 
+@SuppressWarnings("unused")
 @Provider
 @Slf4j
 public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
