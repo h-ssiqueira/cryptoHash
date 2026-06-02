@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   hash1: &hash1
     build:
